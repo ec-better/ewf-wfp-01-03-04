@@ -1,0 +1,10 @@
+target
+__pycache__
+*.pyc
+.cache
+
+runc
+.ipynb_checkpoints
+*.tif
+*.lut
+application.xml
