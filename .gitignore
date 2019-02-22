@@ -7,4 +7,5 @@ runc
 .ipynb_checkpoints
 *.tif
 *.lut
+*.properties
 application.xml
