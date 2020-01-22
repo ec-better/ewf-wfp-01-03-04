@@ -35,7 +35,8 @@ def write_output_image(filepath, output_matrix, image_format, data_format, outpu
     if no_data_value is not None:
         raster_band.SetNoDataValue(no_data_value)
     raster_band.WriteArray(output_matrix)
-    gdal.Warp(filepath, output, format="GTiff", outputBoundsSRS='EPSG:4326', xRes=output_geotransform[1], yRes=-output_geotransform[5], targetAlignedPixels=True)
+    
+    gdal.Warp(filepath, output, format="GTiff", outputBoundsSRS='EPSG:4326')
     
     output.FlushCache()
     
@@ -52,7 +53,7 @@ def get_matrix_list(image_list):
     mat_list = []
     for img in image_list:
         dataset = gdal.Open(img)
-        product_array = dataset.GetRasterBand(1).ReadAsArray()
+        product_array = (dataset.GetRasterBand(1).ReadAsArray()).astype(float)
         mat_list.append(product_array)
         dataset = None
     return mat_list
