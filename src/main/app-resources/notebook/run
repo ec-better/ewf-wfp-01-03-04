@@ -12,6 +12,8 @@ import nbformat as nbf
 import uuid
 import ast
 
+import pandas as pd
+
 sys.path.append('/opt/anaconda/bin/')
 import cioppy
 ciop = cioppy.Cioppy()
@@ -147,8 +149,43 @@ def main():
     os.chdir(runtime) 
 
     # Loops over all the inputs
-    for reference in sys.stdin:
-      references.append(reference.rstrip())
+    #for reference in sys.stdin:
+    #  references.append(reference.rstrip())
+    
+    
+    # get reference by date
+
+    startdate = ciop.getparam('startdate')
+    enddate = ciop.getparam('enddate')
+    catalogue_url = ciop.getparam('catalogue_url')
+    
+    
+    search_params =  dict([('start', startdate),
+                           ('stop', enddate),
+                           ('count', 'unlimited')])
+
+    search_params['update'] = ciop.getparam('update')
+    
+
+    search = ciop.search(end_point=catalogue_url,
+                         params=search_params,
+                         output_fields='self,identifier,startdate,enclosure',
+                         pagination = 100,
+                         model='EOP')
+    
+    input_metadata = pd.DataFrame.from_dict(search)
+    
+    prods = input_metadata[input_metadata['enclosure'].str.contains('.tif')]
+    
+    for r in prods['self'].tolist():
+        references.append(r)
+        
+        
+    ciop.log('INFO', '-----------------------------------------------------')
+    ciop.log('INFO', 'Number of products found {}'.format(len(references)))
+    ciop.log('INFO', 'The first one: {}'.format(references[0])) 
+    ciop.log('INFO', '-----------------------------------------------------')
+
 
     
     # execute the notebook
