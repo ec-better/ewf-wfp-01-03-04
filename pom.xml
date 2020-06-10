@@ -11,7 +11,7 @@
     <version>3.0.1-docker</version>
   </parent>
   <description>CHIRPS-LTA</description>
-  <version>2.3</version>
+  <version>3.0</version>
   <properties>
     <summary>CHIRPS-LTA</summary>
     <description>CHIRPS-LTA</description>
